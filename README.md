@@ -34,6 +34,14 @@ Tokopedia Play Clone is a backend server task provided by *GoTo Impact - Generas
 
 - [x] JWT Authentication
 
+## Technology & Depedencies
+
+- Node JS
+- Express JS
+- Mongoose
+- bcrypt
+- jsonwebtoken
+
 ## How to run
 
 The following are the steps to install and run this project in your local environment:
