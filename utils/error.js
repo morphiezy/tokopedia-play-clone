@@ -1,7 +1,8 @@
-const throwError = (errorStatus, message) => {
-  const error = new Error(message);
-  error.status = errorStatus;
-  throw error;
-};
+class ErrorHandler extends Error {
+  constructor(message, statusCode) {
+    super(message);
+    this.statusCode = statusCode; 
+  }
+}
 
-export default throwError;
+export default ErrorHandler;

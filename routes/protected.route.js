@@ -2,8 +2,8 @@ import express from "express";
 import authMiddleware from "../middlewares/auth.middleware.js";
 import { updateUser } from "../controllers/user.controller.js";
 import {
-  updateVideoById,
-  deleteVideoByID,
+  updateVideo,
+  deleteVideo,
   createVideo,
 } from "../controllers/video.controller.js";
 
@@ -21,20 +21,18 @@ import {
 
 const router = express.Router();
 
-router.use(authMiddleware);
+router.patch("/api/videos/:id", authMiddleware, updateVideo);
+router.delete("/api/videos/:id", authMiddleware, deleteVideo);
+router.post("/api/videos", authMiddleware, createVideo);
 
-router.patch("/videos/:id", updateVideoById);
-router.delete("/videos/:id", deleteVideoByID);
-router.post("/videos", createVideo);
+router.patch("/api/products/:id", authMiddleware, updateProduct);
+router.delete("/api/products/:id", authMiddleware, deleteProduct);
+router.post("/api/products", authMiddleware, createProduct);
 
-router.patch("/products/:id", updateProduct);
-router.delete("/products/:id", deleteProduct);
-router.post("/products", createProduct);
+router.patch("/api/comments/:id", authMiddleware, updateComment);
+router.post("/api/comments", authMiddleware, createComment);
+router.delete("/api/comments/:id", authMiddleware, deleteComment);
 
-router.patch("/comments/:id", updateComment);
-router.post("/comments", createComment);
-router.delete("/comments/:id", deleteComment);
-
-router.patch("/users/:id", updateUser);
+router.patch("/api/users/:id", authMiddleware, updateUser);
 
 export default router;
