@@ -2,19 +2,19 @@ import mongoose, { Schema } from "mongoose";
 
 const commentSchema = new Schema(
   {
-    user_id: {
+    user: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
       immutable: true,
     },
-    video_id: {
-      type: Schema.Types.ObjectId,
+    video: {
+      type: String,
       ref: "Video",
       required: true,
       immutable: true,
     },
-    comment: {
+    text: {
       type: String,
       required: true,
       max: 255,

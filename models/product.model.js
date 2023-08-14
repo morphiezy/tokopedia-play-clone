@@ -20,8 +20,8 @@ const productSchema = new Schema(
       type: String,
       required: true,
     },
-    video_id: {
-      type: Schema.Types.ObjectId,
+    video: {
+      type: String,
       ref: "Video",
       required: true,
       immutable:true,

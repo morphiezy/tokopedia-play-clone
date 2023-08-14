@@ -59,6 +59,8 @@ const userServices = {
       updatedData.password = encryptedPassword;
     }
 
+    delete data._id;
+
     return User.findByIdAndUpdate(
       userId,
       { ...updatedData },
@@ -68,7 +70,7 @@ const userServices = {
 
   getUserById: async (user_id) => {
     const userId = validator.mongooseId(user_id);
-    return await User.findById(userId);
+    return await User.findById(userId,"-_id username picture");
   }
 
 };

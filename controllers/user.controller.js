@@ -33,4 +33,9 @@ const updateUser = async (req, res) => {
   response.success(res, updatedUser, 200);
 };
 
-export { login, register, updateUser };
+const getUserById = async (req, res) => {
+  const user = await userServices.getUserById(req.params.id);
+  response.success(res, user, 200);
+};
+
+export { login, register, updateUser, getUserById };

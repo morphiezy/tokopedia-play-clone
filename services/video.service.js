@@ -17,7 +17,7 @@ const videoServices = {
       title: data.title,
       youtube_url: url,
       thumbnail: yt_thumbnail,
-      user_id: userId,
+      user: userId,
     });
 
     const { _id, title, youtube_url, thumbnail } = await videoDoc.save();
@@ -35,16 +35,29 @@ const videoServices = {
     return videoDoc.save();
   },
 
-  getAllVideos: () => {
-    return Video.find({}, "_id title thumbnail views createdAt updatedAt");
+  getAllVideos: async (category) => {
+    const videos = await Video.find({}, "_id title thumbnail views createdAt")
+    .populate({path:"user", select: "-_id username picture"})
+
+    if (category === "populars") {
+      return videos.sort((a,b) => b.views - a.views);
+    }
+    else if (category === "latest") {
+      return videos.sort((a,b) => b.createdAt - a.createdAt);
+    }
+    else {
+      return videos;
+    }
+
   },
 
   getVideoById: async (video_id) => {
-    const videoId = validator.mongooseId(video_id);
+  
     const video = await Video.findById(
-      videoId,
+      video_id,
       "title youtube_url views createdAt updatedAt views"
-    );
+    )
+    .populate({path:"user", select: "-_id username picture"});
 
     if(!video) {
       throw new ErrorHandler("video not available", 404);
@@ -61,11 +74,16 @@ const videoServices = {
       ErrorHandler(404, "user not found");
     }
 
-    return Video.find({ user_id: userId });
+    return Video.find({ user: userId });
+  },
+
+  searchVideo: (title) => {
+    const regex = new RegExp(title, 'i');
+    return Video.find({title: regex}, "_id title thumbnail views createdAt")
+    .populate({path:"user", select: "-_id username picture"})
   },
 
   updateVideo: async (user_id, video_id, data) => {
-    const videoId = validator.mongooseId(video_id);
     const youtubeURL = data?.youtube_url;
 
     if (youtubeURL) {
@@ -78,14 +96,13 @@ const videoServices = {
       data.thumbnail = `https://i.ytimg.com/vi/${ytid}/maxresdefault.jpg`;
     }
 
-    if(data?.views) {
-      delete data.views;
-    }
+    delete data.views;
+    delete data._id;
 
     const updatedVideo = await Video.findOneAndUpdate(
       {
-        _id: videoId, 
-        user_id
+        _id: video_id, 
+        user: user_id
       }, 
       {...data},
       {
@@ -102,9 +119,8 @@ const videoServices = {
   },
 
   deleteVideo: async (id) => {
-    const videoId = validator.mongooseId(id);
-    await Product.deleteMany({ video_id: videoId });
-    await Comment.deleteMany({ video_id: videoId });
+    await Product.deleteMany({ video_id: id });
+    await Comment.deleteMany({ video_id: id });
     return Video.findByIdAndDelete(id);
   },
 };

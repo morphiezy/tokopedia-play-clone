@@ -1,7 +1,12 @@
 import mongoose, { Schema } from "mongoose";
+import { nanoid } from 'nanoid'
 
 const videoSchema = new Schema(
   {
+    _id: {
+      type: String,
+      default: ()=> nanoid(10)
+    },
     title: {
       type: String,
       required: true,
@@ -18,7 +23,7 @@ const videoSchema = new Schema(
       type: Number,
       default: 0,
     },
-    user_id: {
+    user: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,

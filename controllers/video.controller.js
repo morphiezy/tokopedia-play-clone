@@ -13,7 +13,7 @@ const createVideo = async (req, res) => {
 };
 
 const getAllVideo = async (req, res) => {
-  const videos = await videoServices.getAllVideos();
+  const videos = await videoServices.getAllVideos(req.query.category);
   response.success(res, videos, 200);
 };
 
@@ -24,8 +24,8 @@ const getVideoById = async (req, res) => {
 
 const watchVideo = async (req, res) => {
   const videoDoc = await videoServices.getVideoById(req.params.id);
-  const updatedVideo = await videoServices.updateViewsVideo(videoDoc);
-  response.success(res, updatedVideo, 200);
+  await videoServices.updateViewsVideo(videoDoc);
+  response.success(res, null, 204);
 };
 
 const getVideoByUserId = async (req, res) => {
@@ -33,6 +33,11 @@ const getVideoByUserId = async (req, res) => {
   const videos = await videoServices.getVideosByUserId(userId);
   response.success(res, videos, 200);
 };
+
+const searchVideo = async (req,res) => {
+  const videos = await videoServices.searchVideo(req.query.title);
+  response.success(res, videos, 200);
+}
 
 const updateVideo = async (req, res) => {
   const updatedVideo = await videoServices.updateVideo(
@@ -57,4 +62,5 @@ export {
   getVideoByUserId,
   updateVideo,
   deleteVideo,
+  searchVideo
 };

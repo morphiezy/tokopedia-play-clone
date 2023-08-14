@@ -12,7 +12,11 @@ const userSchema = new Schema({
         type: String,
         required: true,
         min:6,
-    }
+    },
+    picture: {
+        type: String,
+        default:null
+    },
 })
 
 export default mongoose.model("User", userSchema);

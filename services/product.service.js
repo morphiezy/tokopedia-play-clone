@@ -5,8 +5,7 @@ import ErrorHandler from "../utils/error.js";
 
 const productServices = {
   createProduct: async (product_data) => {
-    const videoId = validator.mongooseId(product_data.video_id);
-    const video = await Video.findById(videoId);
+    const video = await Video.findById(product_data.video);
 
     if (!video) {
       throw new ErrorHandler("video not available", 404);
@@ -41,14 +40,7 @@ const productServices = {
   },
 
   getProductByVideoId: async (video_id) => {
-    const videoId = validator.mongooseId(video_id);
-    const product = await Product.find({ video_id: videoId });
-
-    if (!product) {
-      throw new ErrorHandler("video not available", 404);
-    }
-
-    return product;
+    return await Product.find({ video: video_id }, "title picture price url")
   },
 
   updateProduct: async (id, product_data) => {
@@ -67,6 +59,8 @@ const productServices = {
     if (emptyFields) {
       throw new ErrorHandler(`${emptyFields} fields is required`, 400);
     }
+
+    delete product_data._id;
 
     return Product.findOneAndUpdate({ _id: productId }, product_data, {
       new: true,

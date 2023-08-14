@@ -8,6 +8,7 @@ Tokopedia Play Clone is a backend server task provided by *GoTo Impact - Generas
   - [x] Create video
   - [x] Update video
   - [x] Delete video
+  - [x] Search Video 
   - [x] Get all videos
   - [x] Get video by id
   - [x] Get video by user id 
