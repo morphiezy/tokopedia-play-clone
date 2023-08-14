@@ -11,7 +11,6 @@ import protectedRoute from "./routes/protected.route.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
 
 dotenv.config();
-connectMongoDB();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,6 +26,8 @@ app.use((req, res) => {
 });
 app.use(errorMiddleware);
 
-app.listen(PORT, () => {
-  console.log(`Server running on port : ${PORT}`);
-});
+connectMongoDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server running on port : ${PORT}`);
+  });
+})
